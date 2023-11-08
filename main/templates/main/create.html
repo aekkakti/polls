@@ -1,0 +1,12 @@
+{% extends "layout/basic.html" %}
+{% load bootstrap4 %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+            <h1>Создание нового опроса</h1>
+        {{ form.as_p }}
+        {% buttons submit='Создать опрос' %} {% endbuttons %}
+</form>
+{% endblock %}

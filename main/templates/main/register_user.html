@@ -1,0 +1,17 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+{% load static %}
+
+{% block content %}
+  <form method="POST" enctype="multipart/form-data">
+	{% csrf_token %}
+	  <h2>Регистрация</h2>
+	  {{ form.as_p }}
+		  {% if profile.avatar %}
+			<img src="{{ profile.avatar.url }}">
+		  {% endif %}
+
+	{% buttons submit='Зарегистрироваться' %} {% endbuttons %}
+</form>
+{% endblock %}

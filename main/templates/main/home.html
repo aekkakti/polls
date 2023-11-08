@@ -1,0 +1,11 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block content %}
+        {% for i in qures %}
+            {{ i.short_description }}
+            <a class="nav-link root" href="{% url 'main:vote' %}">Создать опрос</a>
+            <a href="{% url 'main:results' poll.id %}">Results</a>
+        {% endfor %}
+{% endblock %}

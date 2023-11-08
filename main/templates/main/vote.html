@@ -1,0 +1,18 @@
+{% extends "layout/basic.html" %}
+
+{% load bootstrap4 %}
+
+{% block title %}
+Выберите один из предложенных вариантов
+{% endblock %}
+
+{% block content %}
+  <form method="POST">
+	{% csrf_token %}
+      {{ poll.question }}
+      {{ poll.option.one }}
+      {{ poll.option.two }}
+      {{ poll.option.three }}
+	{% buttons submit='Проголосовать' %} {% endbuttons %}
+</form>
+{% endblock %}

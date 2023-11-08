@@ -1,0 +1,12 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+   <h2>Это сайт с опросами</h2>
+{% if user.is_authenticated %}
+<br><h3>Все опросы:</h3>
+   {% for poll in polls %}
+      {{ poll.question }}
+   {% endfor %}
+{% endif %}
+
+{% endblock %}
