@@ -8,11 +8,11 @@
 
 {% block content %}
   <form method="POST">
-	{% csrf_token %}
-      {{ poll.question }}
-      {{ poll.option.one }}
-      {{ poll.option.two }}
-      {{ poll.option.three }}
-	{% buttons submit='Проголосовать' %} {% endbuttons %}
-</form>
+        {% csrf_token %}
+          {{poll.question}}
+          {{poll.option_one}}
+          {{poll.option_two}}
+          {{poll.option_three}}
+        {% buttons submit='Проголосовать' %} {% endbuttons %}
+  </form>
 {% endblock %}

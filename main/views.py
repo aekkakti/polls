@@ -16,6 +16,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView
+from django.views import View
 
 from .forms import UserRegisterForm, ChangeUserInfoForm, CreatePollForm
 from .models import AdvUser, Poll
@@ -121,6 +122,11 @@ class CreatePoll(CreateView):
 class ViewPolls(ListView):
     model = Poll
     template_name = 'main/index.html'
+    context_object_name = 'polls'
+
+class VotePolls(View):
+    model = Poll
+    template_name = 'main/vote.html'
     context_object_name = 'polls'
 
 
