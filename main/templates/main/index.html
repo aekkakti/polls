@@ -3,9 +3,8 @@
 {% block content %}
 <br><h3>Все опросы:</h3>
    {% for poll in polls %}
-      <p>Вопрос: {{ poll.question }}</p>
-      Короткое описание: {{poll.short_description}}<br><br>
-   <a href="accounts/vote/{{poll.id}}">Перейти к опросу</a><br><br>
+   Вопрос: <a href="{% url 'main:detail' poll.id %}">{{poll.question}}</a> <br><br>
+   Короткое описание: {{poll.short_description}}<br><br>
    {% endfor %}
 
 {% endblock %}

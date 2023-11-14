@@ -3,3 +3,6 @@ from .models import *
 
 admin.site.register(AdvUser)
 admin.site.register(Poll)
+
+
+

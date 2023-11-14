@@ -19,7 +19,9 @@ urlpatterns = [
    path('accounts/profile/delete/', DeleteUserView.as_view(), name='profile_delete'),
    path('polls/create', CreatePoll.as_view(), name='poll_create'),
    path('home/', PollHome.as_view(), name='poll_home'),
-   path('accounts/vote/<poll_id>/', VotePolls.as_view(), name='vote'),
+   path('detail/<int:pk>/', DetailView.as_view(), name='detail'),
+   path('<int:pk>/results/', ResultsView.as_view(), name='results'),
+   path('vote/<int:poll_id>/', vote, name='vote'),
    # path('accounts/home/', home, name='home'),
    # path('accounts/create/', create, name='create'),
 

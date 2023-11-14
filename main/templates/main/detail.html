@@ -1,0 +1,15 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+<form action="{% url 'main:vote' poll.id %}" method="post">
+    {% csrf_token %}
+        <legend>
+            <h1>{{poll.question}}</h1>
+        </legend>
+        <h3>{{poll.full_description}}</h3><br>
+        <input type="checkbox"> {{poll.option_one}} <br>
+        <input type="checkbox"> {{poll.option_two}}<br>
+        <input type="checkbox"> {{poll.option_three}}<br>
+    <input type="submit" value="Проголосовать">
+</form>
+{% endblock %}

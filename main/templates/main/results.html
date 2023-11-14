@@ -1,11 +1,7 @@
-{% extends "layout/basic.html" %}
-
-{% load bootstrap4 %}
-{% load static %}
-
-{{ poll.question }}
-    {{ poll.option_one }} -- {{ poll.option_one_count }} votes
-    {{ poll.option_two }} -- {{ poll.option_two_count }} votes
-    {{ poll.option_three }} -- {{ poll.option_three_count }} votes
-Total -- {{ poll.total }}
-
+<h1>{{ question.question_text }}</h1>
+<ul>
+    {% for choice in question.choice_set.all %}
+    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{choice.votes|pluralize}}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'polls:detail'  question.id %}">выбрать еще раз? </a>

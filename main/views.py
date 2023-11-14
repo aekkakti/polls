@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import TemplateDoesNotExist
 from django.template.loader import get_template
 from django.contrib.auth.views import LoginView
@@ -7,19 +7,19 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
-from django.views.generic import DeleteView, ListView
+from django.views.generic import DeleteView, ListView, DetailView
 from django.contrib.auth import logout
 from django.contrib import messages
 
 
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import UpdateView, CreateView
 from django.views import View
 
 from .forms import UserRegisterForm, ChangeUserInfoForm, CreatePollForm
-from .models import AdvUser, Poll
+from .models import AdvUser, Poll, Choice
 
 
 def other_page(request, page):
@@ -124,11 +124,29 @@ class ViewPolls(ListView):
     template_name = 'main/index.html'
     context_object_name = 'polls'
 
-class VotePolls(View):
+class DetailView(DetailView):
     model = Poll
-    template_name = 'main/vote.html'
-    context_object_name = 'polls'
+    template_name = 'main/detail.html'
 
+
+class ResultsView(DetailView):
+    model = Poll
+    template_name = 'main/results.html'
+
+
+def vote(request, poll_id):
+    poll = get_object_or_404(Poll, pk=poll_id)
+    try:
+        selected_choice = poll.choice_set.get(pk=request.POST['choice'])
+    except (KeyError, Choice.DoesNotExist):
+        return render(request, 'main/detail.html', {
+            'Poll': Poll,
+            'error_message': 'вы не сделали выбор'
+        })
+    else:
+        selected_choice.votes += 1
+        selected_choice.save()
+        return HttpResponseRedirect(reverse('main:results', args=(poll.id,)))
 
 
 
