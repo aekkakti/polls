@@ -1,6 +1,6 @@
-git clone https://github.com/aekkakti/polls.git
+git clone https://github.com/aekkakti/polls.git <br>
 
-pip install django
-pip install django-bootstrap4
-pip install django-widget-tweaks
-pip install Pillow
+pip install django <br>
+pip install django-bootstrap4 <br>
+pip install django-widget-tweaks <br>
+pip install Pillow <br>
