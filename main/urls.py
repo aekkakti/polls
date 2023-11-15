@@ -22,8 +22,4 @@ urlpatterns = [
    path('detail/<int:pk>/', DetailView.as_view(), name='detail'),
    path('<int:pk>/results/', ResultsView.as_view(), name='results'),
    path('vote/<int:poll_id>/', vote, name='vote'),
-   # path('accounts/home/', home, name='home'),
-   # path('accounts/create/', create, name='create'),
-
-   # path('accounts/results/<poll_id>/', results, name='results'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
