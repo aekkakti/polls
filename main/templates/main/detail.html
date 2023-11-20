@@ -1,5 +1,6 @@
 {% extends "layout/basic.html" %}
 {% block content %}
+{% if user.is_authenticated %}
 <form action="{% url 'main:vote' poll.id %}" method="post">
     {% csrf_token %}
         <legend>
@@ -11,4 +12,7 @@
         <input type="radio" name="third_option" value="{{choice.id}}"> {{poll.option_three}}<br>
     <input type="submit" value="Проголосовать">
 </form>
+{% else %}
+<h3>Вы не можете голосовать, авторизуйтесь в систему</h3>
+{% endif %}
 {% endblock %}
