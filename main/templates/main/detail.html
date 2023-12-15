@@ -7,9 +7,9 @@
             <h1>{{poll.question}}</h1>
         </legend>
         <h3>{{poll.full_description}}</h3><br>
-        <input type="radio" name="first_option" value="{{choice.id}}"> {{poll.option_one}} <br>
-        <input type="radio" name="second_option" value="{{choice.id}}"> {{poll.option_two}}<br>
-        <input type="radio" name="third_option" value="{{choice.id}}"> {{poll.option_three}}<br>
+        <input type="radio" name="choice" value="{{choice.id}}"> {{poll.option_one}} <br>
+        <input type="radio" name="choice" value="{{choice.id}}"> {{poll.option_two}}<br>
+        <input type="radio" name="choice" value="{{choice.id}}"> {{poll.option_three}}<br>
     <input type="submit" value="Проголосовать">
 </form>
 {% else %}
