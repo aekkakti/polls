@@ -1,16 +1,18 @@
 {% extends "layout/basic.html" %}
+{% load static %}
 {% block content %}
 {% if user.is_authenticated %}
-<form action="{% url 'main:vote' poll.id %}" method="post">
-    {% csrf_token %}
-        <legend>
-            <h1>{{poll.question}}</h1>
-        </legend>
-        <h3>{{poll.full_description}}</h3><br>
-        <input type="radio" name="choice" value="{{choice.id}}"> {{poll.option_one}} <br>
-        <input type="radio" name="choice" value="{{choice.id}}"> {{poll.option_two}}<br>
-        <input type="radio" name="choice" value="{{choice.id}}"> {{poll.option_three}}<br>
-    <input type="submit" value="Проголосовать">
+<form action="{% url 'main:vote' polls.id %}" method="post">
+{% csrf_token %}
+<fieldset>
+    <legend><h1>{{ polls.question }}</h1></legend>
+    {% for choice in polls.choice_set.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+    {% endfor %}
+    <img src="{{ polls.poll_avatar.url }}"width="350px"><br><br>
+</fieldset>
+<input type="submit" value="Проголосовать">
 </form>
 {% else %}
 <h3>Вы не можете голосовать, авторизуйтесь в систему</h3>

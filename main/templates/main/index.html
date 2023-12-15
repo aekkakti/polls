@@ -1,9 +1,14 @@
 {% extends "layout/basic.html" %}
 {% block content %}
 <br><h3>Все опросы:</h3>
-   {% for poll in polls %}
-   Вопрос: <a href="{% url 'main:detail' poll.id %}">{{poll.question}}</a> <br><br>
-   Короткое описание: {{poll.short_description}}<br><br>
-   {% endfor %}
+{% for poll in polls %}
+
+<p> <b>Короткое описание опроса: </b> {{poll.short_description}} </p>
+<p> <b> Время создания опроса </b>{{poll.begin_date}} </p>
+<p> <b> Вопрос:</b> <a href="{% url 'main:detail' poll.id %}"> {{ poll.question }}</a></p>
+<p> <b> Результаты опроса:</b> <a href="{% url 'main:results' poll.id %}"> Посмотреть</a></p><br><br>
+
+
+{% endfor %}
 
 {% endblock %}

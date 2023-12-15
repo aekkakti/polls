@@ -19,7 +19,3 @@ class UserRegisterForm(UserCreationForm):
         model = AdvUser
         fields = ('username', 'email', 'password1', 'password2', 'avatar')
 
-class CreatePollForm(ModelForm):
-    class Meta:
-        model = Poll
-        fields = ('question', 'option_one', 'option_two', 'option_three', 'poll_avatar', 'short_description', 'full_description', 'begin_date', 'end_date')

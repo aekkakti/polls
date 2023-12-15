@@ -1,7 +1,11 @@
 {% extends "layout/basic.html" %}
+{% load static %}
 {% block content %}
 <h1>{{ poll.question }}</h1>
-    {{poll.option_one}} -- {{choice.votes}} % <br>
-    {{poll.option_two}} -- {{choice.votes}} % <br>
-    {{poll.option_three}} -- {{choice.votes}} % <br>
+
+<ul>
+    {% for choice, percentage in choices_with_percentages %}
+    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{choice.votes|pluralize}} ({{percentage}}%)</li>
+    {% endfor %}
+</ul>
 {% endblock %}

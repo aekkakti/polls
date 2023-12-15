@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 
 class AdvUser(AbstractUser):
@@ -16,12 +17,6 @@ class Meta(AbstractUser.Meta):
 
 class Poll(models.Model):
     question = models.TextField()
-    option_one = models.CharField(max_length=35)
-    option_two = models.CharField(max_length=35)
-    option_three = models.CharField(max_length=35)
-    option_one_count = models.IntegerField(default=0)
-    option_two_count = models.IntegerField(default=0)
-    option_three_count = models.IntegerField(default=0)
     poll_avatar = models.ImageField(upload_to='media/')
     full_description = models.TextField(max_length=254)
     short_description = models.CharField(max_length=30)
@@ -29,10 +24,8 @@ class Poll(models.Model):
     begin_date = models.DateTimeField(default=timezone.now())
     end_date = models.DateTimeField(default=timezone.now()+timedelta(hours=2))
 
-
-
-    def total(self):
-        return self.option_one_count + self.option_two_count + self.option_three_count
+    def is_expired(self):
+        return timezone.now() > self.end_date
 
     def __str__(self):
         return self.question
@@ -40,7 +33,15 @@ class Poll(models.Model):
 class Choice(models.Model):
     question = models.ForeignKey(Poll, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
+    votes = models.IntegerField()
 
     def __str__(self):
         return self.choice_text
+
+class Voter(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+

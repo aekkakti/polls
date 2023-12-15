@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import TemplateDoesNotExist
@@ -10,16 +11,16 @@ from django.contrib.auth.views import PasswordChangeView
 from django.views.generic import DeleteView, ListView, DetailView
 from django.contrib.auth import logout
 from django.contrib import messages
+from django.db.models import Sum
 
 
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import UpdateView, CreateView
-from django.views import View
 
-from .forms import UserRegisterForm, ChangeUserInfoForm, CreatePollForm
-from .models import AdvUser, Poll, Choice
+from .forms import UserRegisterForm, ChangeUserInfoForm
+from .models import AdvUser, Poll, Choice, Voter
 
 
 def other_page(request, page):
@@ -113,39 +114,58 @@ class DeleteUserView(LoginRequiredMixin, DeleteView):
        return get_object_or_404(queryset, pk=self.user_id)
 
 
-class CreatePoll(CreateView):
-    model = Poll
-    template_name = 'main/create.html'
-    success_url = reverse_lazy('main:index')
-    form_class = CreatePollForm
 
 class ViewPolls(ListView):
     model = Poll
     template_name = 'main/index.html'
     context_object_name = 'polls'
 
+    def get_queryset(self):
+        return Poll.objects.filter(end_date__gte=timezone.now())
+
 class DetailView(DetailView):
     model = Poll
     template_name = 'main/detail.html'
+    context_object_name = 'polls'
 
 
 class ResultsView(DetailView):
     model = Poll
     template_name = 'main/results.html'
+    context_object_name = 'polls'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        poll = self.object
+        total_votes = poll.choice_set.aggregate(total_votes=Sum('votes'))['total_votes']
+
+        choices_with_percentages = []
+        for choice in poll.choice_set.all():
+            percentage = (choice.votes / total_votes) * 100 if total_votes > 0 else 0
+            choices_with_percentages.append((choice, percentage))
+
+        context['choices_with_percentages'] = choices_with_percentages
+        return context
 
 
 def vote(request, poll_id):
     poll = get_object_or_404(Poll, pk=poll_id)
+    if Voter.objects.filter(poll_id=poll_id, user_id=request.user.id).exists():
+        messages.error(request, "Вы уже голосовали в этом опросе.")
+        return HttpResponseRedirect(reverse('main:index'))
     try:
         selected_choice = poll.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         return render(request, 'main/detail.html', {
-            'Poll': Poll,
-            'error_message': 'вы не сделали выбор'
+            'poll': poll,
+            'error_message': "Вы ничего не выбрали",
         })
     else:
         selected_choice.votes += 1
         selected_choice.save()
+        v = Voter(user=request.user, poll=poll)
+        v.save()
         return HttpResponseRedirect(reverse('main:results', args=(poll.id,)))
 
 

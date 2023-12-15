@@ -27,13 +27,10 @@
                <a class="dropdown-item" href="{% url 'main:profile_delete' %}">Удалить пользователя</a>
            </div>
        </div>
-       <a class="nav-link root" href="{% url 'main:poll_create' %}">Создать опрос</a>
        {% else %}
        <a class="p-2 text-dark" href="{% url 'main:register_user' %}">Регистрация</a>
        <a class="p-2 text-dark" href="{% url 'main:login' %}">Вход</a>
        {% endif %}
-
-       <a class="nav-link root" href="{% url 'main:other' page='about' %}">О сайте</a>
         </div>
    </div>
    <div class="row">
